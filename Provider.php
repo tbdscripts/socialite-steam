@@ -126,6 +126,7 @@ class Provider extends AbstractProvider
         $data = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOCDATA);
         if (empty($content) || $data == false || isset($data->error)) return [];
 
+        // Return required data
         return [
             'steamid' => $data->steamID64,
             'personaname' => $data->steamID,
