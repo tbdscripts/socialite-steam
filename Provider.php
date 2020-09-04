@@ -126,25 +126,12 @@ class Provider extends AbstractProvider
         $data = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOCDATA);
         if (empty($content) || $data == false || isset($data->error)) return [];
 
-        // Return required data
+        // Return required data 
         return [
             'steamid' => $data->steamID64,
             'personaname' => $data->steamID,
             'avatarmedium' => $data->avatarMedium
         ];
-
-        /* if (empty($this->getConfig('api_key'))) {
-            throw new RuntimeException('The Steam API key has not been specified.');
-        }
-
-        $response = $this->getHttpClient()->request(
-            'GET',
-            sprintf(self::STEAM_INFO_URL, $this->getConfig('api_key'), $this->steamId)
-        );
-
-        $contents = json_decode($response->getBody()->getContents(), true); */
-
-        //return Arr::get($contents, 'response.players.0');
     }
 
     /**
