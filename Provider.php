@@ -58,7 +58,7 @@ class Provider extends AbstractProvider
     /**
      * @var string
      */
-    public const OPENID_NS = 'https://specs.openid.net/auth/2.0';
+    public const OPENID_NS = 'http://specs.openid.net/auth/2.0';
 
     /**
      * @var string
@@ -117,7 +117,7 @@ class Provider extends AbstractProvider
         // Use XML
         $response = $this->getHttpClient()->request(
             'GET',
-            sprintf(self::PROFILE_URL, $this-steamId)
+            sprintf(self::PROFILE_URL, $this->steamId)
         );
 
 
@@ -162,8 +162,8 @@ class Provider extends AbstractProvider
             'openid.mode'       => 'checkid_setup',
             'openid.return_to'  => $this->redirectUrl,
             'openid.realm'      => sprintf('%s://%s', $this->request->getScheme(), $realm),
-            'openid.identity'   => 'https://specs.openid.net/auth/2.0/identifier_select',
-            'openid.claimed_id' => 'https://specs.openid.net/auth/2.0/identifier_select',
+            'openid.identity'   => 'http://specs.openid.net/auth/2.0/identifier_select',
+            'openid.claimed_id' => 'http://specs.openid.net/auth/2.0/identifier_select',
         ];
 
         return self::OPENID_URL.'?'.http_build_query($params, '', '&');
@@ -195,6 +195,7 @@ class Provider extends AbstractProvider
 
         return $results['is_valid'] === 'true';
     }
+
 
     /**
      * Validates if the request object has required stream attributes.
