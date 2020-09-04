@@ -1,11 +1,18 @@
 {
-    "name": "socialiteproviders/steam",
-    "description": "Steam OpenID Provider for Laravel Socialite",
+    "name": "tbdscripts/socialite-steam",
+    "description": "Steam OpenID Provider for Laravel Socialite, edited for Cosmo",
     "license": "MIT",
     "authors": [
         {
             "name": "Christopher Eklund",
             "email": "eklundchristopher@gmail.com"
+        }
+    ],
+    "contributors": [
+        {
+            "name": "Mex de Loo",
+            "email": "mex@zeodev.cc",
+            "website": "https://zeodev.cc"
         }
     ],
     "require": {

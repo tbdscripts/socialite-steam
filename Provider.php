@@ -63,6 +63,11 @@ class Provider extends AbstractProvider
     /**
      * @var string
      */
+    public const PROFILE_URL = 'https://steamcommunity.com/profiles/%s?xml=1';
+
+    /**
+     * @var string
+     */
     public const OPENID_ERROR = 'openid_error';
 
     /**
@@ -109,7 +114,25 @@ class Provider extends AbstractProvider
             return null;
         }
 
-        if (empty($this->getConfig('api_key'))) {
+        // Use XML
+        $response = $this->getHttpClient()->request(
+            'GET',
+            sprintf(self::PROFILE_URL, $this-steamId)
+        );
+
+
+        $content = $response->getBody()->getContents();
+
+        $data = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOCDATA);
+        if (empty($content) || $data == false || isset($data->error)) return [];
+
+        return [
+            'steamid' => $data->steamID64,
+            'personaname' => $data->steamID,
+            'avatarmedium' => $data->avatarMedium
+        ];
+
+        /* if (empty($this->getConfig('api_key'))) {
             throw new RuntimeException('The Steam API key has not been specified.');
         }
 
@@ -118,9 +141,9 @@ class Provider extends AbstractProvider
             sprintf(self::STEAM_INFO_URL, $this->getConfig('api_key'), $this->steamId)
         );
 
-        $contents = json_decode($response->getBody()->getContents(), true);
+        $contents = json_decode($response->getBody()->getContents(), true); */
 
-        return Arr::get($contents, 'response.players.0');
+        //return Arr::get($contents, 'response.players.0');
     }
 
     /**
@@ -131,7 +154,7 @@ class Provider extends AbstractProvider
         return (new User())->setRaw($user)->map([
             'id'       => $user['steamid'],
             'nickname' => Arr::get($user, 'personaname'),
-            'name'     => Arr::get($user, 'realname'),
+            'name'     => null,
             'email'    => null,
             'avatar'   => Arr::get($user, 'avatarmedium'),
         ]);
