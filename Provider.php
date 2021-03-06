@@ -128,9 +128,9 @@ class Provider extends AbstractProvider
 
         // Return required data
         return [
-            'steamid' => $data->steamID64,
-            'personaname' => $data->steamID,
-            'avatarmedium' => $data->avatarMedium
+            'steamid' => (string) $data->steamID64,
+            'personaname' => (string) $data->steamID,
+            'avatarmedium' => (string) $data->avatarMedium
         ];
 
         /* if (empty($this->getConfig('api_key'))) {
