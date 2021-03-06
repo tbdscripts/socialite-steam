@@ -204,9 +204,11 @@ class Provider extends AbstractProvider
 
         $results = $this->parseResults($response->getBody()->getContents());
 
-        $this->parseSteamID();
+        if ($isValid = $results['is_valid'] === 'true') {
+            $this->parseSteamID();   
+        }
 
-        return $results['is_valid'] === 'true';
+        return $isValid;
     }
 
     /**
@@ -303,7 +305,7 @@ class Provider extends AbstractProvider
             $matches
         );
 
-        $this->steamId = is_numeric($matches[1]) ? $matches[1] : 0;
+        $this->steamId = isset($matches[1]) && is_numeric($matches[1]) ? $matches[1] : 0;
     }
 
     /**
