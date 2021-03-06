@@ -117,7 +117,7 @@ class Provider extends AbstractProvider
         // Use XML
         $response = $this->getHttpClient()->request(
             'GET',
-            sprintf(self::PROFILE_URL, $this-steamId)
+            sprintf(self::PROFILE_URL, $this->steamId)
         );
 
 
