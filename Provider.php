@@ -38,7 +38,7 @@ class Provider extends AbstractProvider
     /**
      * @var string
      */
-    public const STEAM_INFO_URL = 'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=%s&steamids=%s';
+    public const STEAM_INFO_URL = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=%s&steamids=%s';
 
     /**
      * @var string
@@ -58,12 +58,12 @@ class Provider extends AbstractProvider
     /**
      * @var string
      */
-    public const OPENID_NS = 'https://specs.openid.net/auth/2.0';
+    public const OPENID_NS = 'http://specs.openid.net/auth/2.0';
 
     /**
      * @var string
      */
-    public const PROFILE_URL = 'https://steamcommunity.com/profiles/%s?xml=1';
+    public const PROFILE_URL = 'http://steamcommunity.com/profiles/%s?xml=1';
 
     /**
      * @var string
@@ -175,8 +175,8 @@ class Provider extends AbstractProvider
             'openid.mode'       => 'checkid_setup',
             'openid.return_to'  => $this->redirectUrl,
             'openid.realm'      => sprintf('%s://%s', $this->request->getScheme(), $realm),
-            'openid.identity'   => 'https://specs.openid.net/auth/2.0/identifier_select',
-            'openid.claimed_id' => 'https://specs.openid.net/auth/2.0/identifier_select',
+            'openid.identity'   => 'http://specs.openid.net/auth/2.0/identifier_select',
+            'openid.claimed_id' => 'http://specs.openid.net/auth/2.0/identifier_select',
         ];
 
         return self::OPENID_URL.'?'.http_build_query($params, '', '&');
@@ -204,9 +204,11 @@ class Provider extends AbstractProvider
 
         $results = $this->parseResults($response->getBody()->getContents());
 
-        $this->parseSteamID();
+        if ($isValid = $results['is_valid'] === 'true') {
+            $this->parseSteamID();   
+        }
 
-        return $results['is_valid'] === 'true';
+        return $isValid;
     }
 
     /**
@@ -303,7 +305,7 @@ class Provider extends AbstractProvider
             $matches
         );
 
-        $this->steamId = is_numeric($matches[1]) ? $matches[1] : 0;
+        $this->steamId = isset($matches[1]) && is_numeric($matches[1]) ? $matches[1] : 0;
     }
 
     /**
